@@ -2,7 +2,7 @@
 - hosts: all
   become: yes
   become_method: sudo
-  gather_facts: no
+  gather_facts: yes
 #  tasks:
 #  - name: install apache
 #    apt:
@@ -25,9 +25,18 @@
     apt:
       name: nodejs
       state: present
-  - name: Node RED
+  - name: Install forever
+    npm:
+      name: forever
+      global: yes
+      state: present	
+  - name: Install Node RED
     npm:
       name: node-red
       global: yes
       production: yes
       state: present
+  - name: Run Node RED
+#    shell: node-red nohup npm start &
+    command: forever start /usr/bin/node-red 
+    enabled: yes
